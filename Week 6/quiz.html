@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Coding Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f3ee;
+      --card: #ffffff;
+      --accent: #2563eb;
+      --accent-light: #dbeafe;
+      --text: #1e1e2e;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --correct: #16a34a;
+      --wrong: #dc2626;
+      --correct-bg: #dcfce7;
+      --wrong-bg: #fee2e2;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    header h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: 2rem;
+      letter-spacing: -1px;
+      color: var(--text);
+    }
+
+    header h1 span { color: var(--accent); }
+
+    header p {
+      color: var(--muted);
+      margin-top: 6px;
+      font-size: 0.95rem;
+    }
+
+    /* TABS */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .tab-btn {
+      padding: 10px 24px;
+      border: 2px solid var(--border);
+      background: var(--card);
+      border-radius: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* PAGES */
+    .page { display: none; width: 100%; max-width: 680px; }
+    .page.active { display: block; }
+
+    /* QUIZ CARDS */
+    .question-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 18px;
+      transition: box-shadow 0.2s;
+    }
+
+    .question-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+
+    .q-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .q-text {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    .options { display: flex; flex-direction: column; gap: 10px; }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.18s;
+      font-size: 0.95rem;
+    }
+
+    .option:hover { border-color: var(--accent); background: var(--accent-light); }
+
+    .option input[type="radio"] { accent-color: var(--accent); width: 16px; height: 16px; }
+
+    /* Result */
+    .result-bar {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 28px;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .result-bar h2 {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.4rem;
+      margin-bottom: 4px;
+    }
+
+    .score-big {
+      font-family: 'Space Mono', monospace;
+      font-size: 3rem;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .score-label { color: var(--muted); font-size: 0.9rem; }
+
+    .submit-btn {
+      display: block;
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto 28px;
+      padding: 14px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Space Mono', monospace;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .submit-btn:hover { background: #1d4ed8; }
+
+    /* ANSWERS PAGE */
+    .answer-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 28px;
+      margin-bottom: 16px;
+    }
+
+    .answer-card .q-text { margin-bottom: 14px; }
+
+    .answer-option {
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.93rem;
+      margin-bottom: 8px;
+      border: 1.5px solid var(--border);
+    }
+
+    .answer-option.correct {
+      background: var(--correct-bg);
+      border-color: var(--correct);
+      color: var(--correct);
+      font-weight: 600;
+    }
+
+    .explanation {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: var(--accent-light);
+      border-radius: 8px;
+      font-size: 0.88rem;
+      color: var(--accent);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>// <span>Coding</span> Quiz</h1>
+  <p>Test your programming knowledge — 5 questions</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('quiz')">📝 Quiz</button>
+  <button class="tab-btn" onclick="switchTab('answers')">✅ Answers</button>
+</div>
+
+<!-- QUIZ PAGE -->
+<div id="quiz-page" class="page active">
+
+  <form id="quiz-form">
+
+    <div class="question-card">
+      <div class="q-num">Q 01 / 05</div>
+      <div class="q-text">What does HTML stand for?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q1" value="a"> HyperText Markup Language</label>
+        <label class="option"><input type="radio" name="q1" value="b"> HyperText Machine Language</label>
+        <label class="option"><input type="radio" name="q1" value="c"> HighText Markup Language</label>
+        <label class="option"><input type="radio" name="q1" value="d"> HyperTool Markup Language</label>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-num">Q 02 / 05</div>
+      <div class="q-text">Which of the following is NOT a JavaScript data type?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q2" value="a"> String</label>
+        <label class="option"><input type="radio" name="q2" value="b"> Boolean</label>
+        <label class="option"><input type="radio" name="q2" value="c"> Integer</label>
+        <label class="option"><input type="radio" name="q2" value="d"> Undefined</label>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-num">Q 03 / 05</div>
+      <div class="q-text">What is the correct way to declare a variable in Python?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q3" value="a"> <code>var x = 10</code></label>
+        <label class="option"><input type="radio" name="q3" value="b"> <code>int x = 10</code></label>
+        <label class="option"><input type="radio" name="q3" value="c"> <code>x = 10</code></label>
+        <label class="option"><input type="radio" name="q3" value="d"> <code>let x = 10</code></label>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-num">Q 04 / 05</div>
+      <div class="q-text">Which data structure follows the LIFO (Last In, First Out) principle?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q4" value="a"> Queue</label>
+        <label class="option"><input type="radio" name="q4" value="b"> Stack</label>
+        <label class="option"><input type="radio" name="q4" value="c"> Array</label>
+        <label class="option"><input type="radio" name="q4" value="d"> Linked List</label>
+      </div>
+    </div>
+
+    <div class="question-card">
+      <div class="q-num">Q 05 / 05</div>
+      <div class="q-text">What does CSS stand for?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q5" value="a"> Colorful Style Sheets</label>
+        <label class="option"><input type="radio" name="q5" value="b"> Creative Style Syntax</label>
+        <label class="option"><input type="radio" name="q5" value="c"> Cascading Style Sheets</label>
+        <label class="option"><input type="radio" name="q5" value="d"> Computer Style Sheets</label>
+      </div>
+    </div>
+
+    <button type="button" class="submit-btn" onclick="submitQuiz()">Submit Quiz →</button>
+
+  </form>
+
+  <div id="result" style="display:none; max-width:680px; margin: 0 auto;">
+    <div class="result-bar">
+      <h2>Your Score</h2>
+      <div class="score-big" id="score-display">0/5</div>
+      <div class="score-label" id="score-msg"></div>
+    </div>
+    <button class="submit-btn" onclick="resetQuiz()">↺ Try Again</button>
+  </div>
+
+</div>
+
+<!-- ANSWERS PAGE -->
+<div id="answers-page" class="page">
+
+  <div class="answer-card">
+    <div class="q-num">Q 01 / 05</div>
+    <div class="q-text">What does HTML stand for?</div>
+    <div class="answer-option correct">✓ A) HyperText Markup Language</div>
+    <div class="answer-option">B) HyperText Machine Language</div>
+    <div class="answer-option">C) HighText Markup Language</div>
+    <div class="answer-option">D) HyperTool Markup Language</div>
+    <div class="explanation">💡 HTML is the standard markup language for creating web pages. It describes the structure of content using elements and tags.</div>
+  </div>
+
+  <div class="answer-card">
+    <div class="q-num">Q 02 / 05</div>
+    <div class="q-text">Which of the following is NOT a JavaScript data type?</div>
+    <div class="answer-option">A) String</div>
+    <div class="answer-option">B) Boolean</div>
+    <div class="answer-option correct">✓ C) Integer</div>
+    <div class="answer-option">D) Undefined</div>
+    <div class="explanation">💡 JavaScript has no "Integer" type. Numbers are all of type <code>Number</code> (or <code>BigInt</code>). String, Boolean, and Undefined are valid JS types.</div>
+  </div>
+
+  <div class="answer-card">
+    <div class="q-num">Q 03 / 05</div>
+    <div class="q-text">What is the correct way to declare a variable in Python?</div>
+    <div class="answer-option">A) <code>var x = 10</code></div>
+    <div class="answer-option">B) <code>int x = 10</code></div>
+    <div class="answer-option correct">✓ C) <code>x = 10</code></div>
+    <div class="answer-option">D) <code>let x = 10</code></div>
+    <div class="explanation">💡 Python uses dynamic typing. You simply write <code>x = 10</code> — no keyword or type declaration needed.</div>
+  </div>
+
+  <div class="answer-card">
+    <div class="q-num">Q 04 / 05</div>
+    <div class="q-text">Which data structure follows LIFO (Last In, First Out)?</div>
+    <div class="answer-option">A) Queue</div>
+    <div class="answer-option correct">✓ B) Stack</div>
+    <div class="answer-option">C) Array</div>
+    <div class="answer-option">D) Linked List</div>
+    <div class="explanation">💡 A Stack works like a pile of plates — the last item added is the first one removed. Queues follow FIFO (First In, First Out).</div>
+  </div>
+
+  <div class="answer-card">
+    <div class="q-num">Q 05 / 05</div>
+    <div class="q-text">What does CSS stand for?</div>
+    <div class="answer-option">A) Colorful Style Sheets</div>
+    <div class="answer-option">B) Creative Style Syntax</div>
+    <div class="answer-option correct">✓ C) Cascading Style Sheets</div>
+    <div class="answer-option">D) Computer Style Sheets</div>
+    <div class="explanation">💡 CSS is used to style and layout web pages — colors, fonts, spacing, and more. "Cascading" refers to how styles are applied in priority order.</div>
+  </div>
+
+</div>
+
+<script>
+  const correctAnswers = { q1: 'a', q2: 'c', q3: 'c', q4: 'b', q5: 'c' };
+
+  function switchTab(tab) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tab + '-page').classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function submitQuiz() {
+    let score = 0;
+    for (let [q, ans] of Object.entries(correctAnswers)) {
+      const selected = document.querySelector(`input[name="${q}"]:checked`);
+      if (selected && selected.value === ans) score++;
+    }
+    document.getElementById('quiz-form').style.display = 'none';
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('score-display').textContent = score + '/5';
+    const msgs = ['Keep practicing! 💪', 'Getting there! 📚', 'Not bad! 🙂', 'Great job! 🎉', 'Perfect score! 🏆'];
+    document.getElementById('score-msg').textContent = msgs[score];
+  }
+
+  function resetQuiz() {
+    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+    document.getElementById('quiz-form').style.display = 'block';
+    document.getElementById('result').style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
