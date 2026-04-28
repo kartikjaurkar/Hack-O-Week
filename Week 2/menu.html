@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugarbrim | Art
+isanal Reserve</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@200;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --champagne: #e5d5b8;
+            --gold: #c5a059;
+            --charcoal: #1a1a1a;
+            --soft-black: #080808;
+            --white: #ffffff;
+            --veg: #2ecc71;
+            --nonveg: #e74c3c;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--soft-black);
+            color: var(--white);
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- Improved Logo & Splash --- */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--soft-black);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            transition: transform 1s cubic-bezier(0.87, 0, 0.13, 1);
+        }
+
+        .premium-logo {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            border: 1px solid var(--gold);
+            transform: rotate(45deg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 60px;
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.4); }
+            70% { box-shadow: 0 0 0 30px rgba(197, 160, 89, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0); }
+        }
+
+        .logo-inner-text {
+            transform: rotate(-45deg);
+            font-family: 'Playfair Display';
+            font-size: 5rem;
+            color: var(--gold);
+        }
+
+        .logo-text-main {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            letter-spacing: 15px;
+            color: var(--champagne);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        /* --- Tab System --- */
+        .tab-navigation {
+            position: sticky;
+            top: 0;
+            background: rgba(8, 8, 8, 0.95);
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px 0;
+            z-index: 1000;
+            border-bottom: 1px solid #222;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: #666;
+            font-family: 'Outfit';
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active {
+            color: var(--gold);
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .menu-section {
+            display: none;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .menu-section.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Grid & Cards --- */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .item-card {
+            background: #111;
+            padding: 20px;
+            border: 1px solid #222;
+            transition: 0.3s;
+        }
+
+        .item-card:hover { border-color: var(--gold); transform: translateY(-5px); }
+
+        .item-title { display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 10px; }
+        .item-desc { color: #888; font-size: 0.8rem; line-height: 1.5; min-height: 45px; margin-bottom: 20px; }
+
+        .indicator { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .veg { background: var(--veg); }
+        .non-veg { background: var(--nonveg); }
+
+        /* --- Beverage Sizes --- */
+        .size-selector { display: flex; gap: 10px; margin-bottom: 15px; }
+        .size-chip { 
+            flex: 1; border: 1px solid #333; text-align: center; 
+            padding: 5px; font-size: 0.7rem; cursor: pointer; color: #666; 
+        }
+        .size-chip.active { border-color: var(--gold); color: var(--gold); background: rgba(197,160,89,0.1); }
+
+        .add-btn {
+            width: 100%; background: var(--gold); border: none; padding: 12px;
+            font-weight: 600; text-transform: uppercase; cursor: pointer; transition: 0.3s;
+        }
+        .add-btn:hover { background: var(--champagne); }
+
+        /* --- UI Controls --- */
+        #cart-sidebar {
+            position: fixed; right: -400px; top: 0; width: 350px; height: 100%;
+            background: #0d0d0d; z-index: 2000; padding: 30px; transition: 0.4s;
+            border-left: 1px solid var(--gold);
+        }
+        #cart-sidebar.active { right: 0; }
+        .cart-fab {
+            position: fixed; bottom: 30px; right: 30px; background: var(--gold);
+            width: 60px; height: 60px; border-radius: 50%; display: flex;
+            justify-content: center; align-items: center; cursor: pointer; z-index: 1500;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen">
+        <div class="premium-logo">
+            <div class="logo-inner-text">S</div>
+        </div>
+        <div class="logo-text-main">Sugarbrim</div>
+        <p style="color: var(--gold); letter-spacing: 5px; margin-bottom: 40px;">THE ART OF INDIAN CUISINE</p>
+        <button class="start-order-btn" onclick="startExperience()">Explore Menu</button>
+    </div>
+
+    <header style="padding: 60px 0; text-align: center; border-bottom: 1px solid #222;">
+        <div class="logo-inner-text" style="font-size: 3rem; transform: none;">S</div>
+        <h1 style="letter-spacing: 8px; font-family: 'Playfair Display';">SUGARBRIM</h1>
+    </header>
+
+    <div class="tab-navigation">
+        <button class="tab-btn active" onclick="openTab(event, 'veg-section')">Vegetarian</button>
+        <button class="tab-btn" onclick="openTab(event, 'nonveg-section')">The Butcher</button>
+        <button class="tab-btn" onclick="openTab(event, 'bread-section')">The Tandoor</button>
+        <button class="tab-btn" onclick="openTab(event, 'bev-section')">Beverages</button>
+    </div>
+
+    <div id="veg-section" class="menu-section active">
+        <div class="menu-grid" id="veg-grid">
+            </div>
+    </div>
+
+    <div id="nonveg-section" class="menu-section">
+        <div class="menu-grid" id="nonveg-grid"></div>
+    </div>
+
+    <div id="bread-section" class="menu-section">
+        <div class="menu-grid" id="bread-grid"></div>
+    </div>
+
+    <div id="bev-section" class="menu-section">
+        <div class="menu-grid">
+            <div class="item-card drink-card" data-base-name="Saffron Badam Lassi">
+                <div class="item-title">
+                    <span class="name-display">Saffron Badam Lassi (S)</span>
+                    <span class="price-display" style="color:var(--gold)">₹180</span>
+                </div>
+                <div class="size-selector">
+                    <div class="size-chip active" onclick="updateDrink(this, 180, 'S')">Small</div>
+                    <div class="size-chip" onclick="updateDrink(this, 260, 'M')">Medium</div>
+                    <div class="size-chip" onclick="updateDrink(this, 340, 'L')">Large</div>
+                </div>
+                <button class="add-btn" onclick="addDrinkFromCard(this)">Add Drink</button>
+            </div>
+            <div class="item-card drink-card" data-base-name="Kokum Rose Spritz">
+                <div class="item-title">
+                    <span class="name-display">Kokum Rose Spritz (S)</span>
+                    <span class="price-display" style="color:var(--gold)">₹210</span>
+                </div>
+                <div class="size-selector">
+                    <div class="size-chip active" onclick="updateDrink(this, 210, 'S')">Small</div>
+                    <div class="size-chip" onclick="updateDrink(this, 290, 'M')">Medium</div>
+                    <div class="size-chip" onclick="updateDrink(this, 380, 'L')">Large</div>
+                </div>
+                <button class="add-btn" onclick="addDrinkFromCard(this)">Add Drink</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="cart-fab" onclick="toggleCart()">🛒</div>
+
+    <div id="cart-sidebar">
+        <h2 style="font-family: 'Playfair Display'; border-bottom: 1px solid #333; padding-bottom: 10px; color: var(--gold);">Your Selection</h2>
+        <div id="cart-items" style="margin: 20px 0; max-height: 70vh; overflow-y: auto;"></div>
+        <div style="position: absolute; bottom: 30px; width: 290px; border-top: 1px solid #222; padding-top: 20px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 1.2rem;">
+                <span>Total</span>
+                <span id="cart-total" style="color: var(--gold);">₹0</span>
+            </div>
+            <button class="add-btn" onclick="checkout()">Place Order</button>
+        </div>
+    </div>
+
+    <script>
+        const vegData = [
+            { name: "Truffle Paneer Tikka", price: 420, desc: "Malai cottage cheese infused with white truffle oil." },
+            { name: "Avocado Papdi Chaat", price: 320, desc: "Modern twist on street food with hass avocado foam." },
+            { name: "Sugarbrim Dal", price: 380, desc: "24-hour slow cooked black lentils with churned butter." },
+            { name: "Jackfruit Galouti", price: 450, desc: "Melt-in-mouth smoked kathal kebabs with ulta tawa paratha." },
+            { name: "Crispy Okra Salt & Pepper", price: 290, desc: "Thinly sliced ladyfingers tossed in Sichuan peppercorns." },
+            { name: "Bharwan Gucchi", price: 850, desc: "Himalayan morels stuffed with herbed khoya and nuts." },
+            { name: "Pesto Paneer Kebab", price: 410, desc: "Basil and pine nut marinated cottage cheese." },
+            { name: "Dahi Ke Sholay", price: 340, desc: "Hung curd fire-crackers with a crunchy bread shell." },
+            { name: "Water Chestnut Stir Fry", price: 310, desc: "Crunchy chestnuts tossed in a spicy curry leaf tempered oil." },
+            { name: "Paneer Lababdar", price: 440, desc: "Creamy tomato gravy with grated cottage cheese and capsicum." }
+        ];
+
+        const nonVegData = [
+            { name: "Raan-e-Sugarbrim", price: 950, desc: "Pulled slow-roasted leg of lamb with a dark cardamom jus." },
+            { name: "Lobster Moilee", price: 1450, desc: "Poached lobster tail in a turmeric and coconut milk broth." },
+            { name: "Zaffrani Murgh Tikka", price: 480, desc: "Persian saffron and cream marinated chicken morsels." },
+            { name: "Nalli Nihari", price: 720, desc: "Classic lamb shank stew slow cooked overnight with 32 spices." },
+            { name: "Coastal Prawn Ghee Roast", price: 680, desc: "Tiger prawns tossed in a fiery Mangalorean chili masala." },
+            { name: "Smoked Duck Seekh", price: 590, desc: "Hand-minced duck meat infused with cloves and cinnamon." },
+            { name: "Chicken Chettinad", price: 490, desc: "Fiery South Indian chicken curry with black peppercorns." },
+            { name: "Tandoori Pomfret", price: 820, desc: "Whole silver pomfret with a spicy coastal marinade." },
+            { name: "Mutton Keema Kulcha", price: 350, desc: "Spiced minced lamb stuffed bread served with mint raita." },
+            { name: "Butter Chicken 1950", price: 520, desc: "The original recipe: smoked chicken in a tangy tomato gravy." }
+        ];
+
+        const breadData = [
+            { name: "Blue Cheese Kulcha", price: 240, desc: "Danish Blue cheese stuffing with a drizzle of wild honey." },
+            { name: "Truffle Parmesan Naan", price: 210, desc: "Leavened bread topped with shaved parmesan and truffle oil." },
+            { name: "Garlic & Chive Naan", price: 110, desc: "Roasted garlic bits and fresh chives." },
+            { name: "Khamiri Roti", price: 90, desc: "Sourdough style Mughlai bread, perfect for gravies." },
+            { name: "Peshawari Naan", price: 180, desc: "Sweet bread stuffed with nuts, raisins, and desiccated coconut." },
+            { name: "Laccha Paratha", price: 85, desc: "Multi-layered whole wheat bread." },
+            { name: "Missi Roti", price: 75, desc: "Gram flour bread with onions and green chilies." },
+            { name: "Olive & Jalapeño Naan", price: 195, desc: "Fusion bread with sliced olives and spicy peppers." },
+            { name: "Butter Naan", price: 80, desc: "Classic hand-stretched refined flour bread." },
+            { name: "Roomali Roti", price: 95, desc: "Paper-thin soft bread tossed in the air." }
+        ];
+
+        function populateGrid(gridId, data, indicatorClass) {
+            const grid = document.getElementById(gridId);
+            data.forEach(item => {
+                grid.innerHTML += `
+                    <div class="item-card">
+                        <div class="item-title">
+                            <span><span class="indicator ${indicatorClass}"></span>${item.name}</span>
+                            <span style="color:var(--gold)">₹${item.price}</span>
+                        </div>
+                        <p class="item-desc">${item.desc}</p>
+                        <button class="add-btn" onclick="addToCart('${item.name}', ${item.price})">Add to Order</button>
+                    </div>`;
+            });
+        }
+
+        function startExperience() { document.getElementById('splash-screen').style.transform = 'translateY(-100%)'; }
+        
+        function openTab(evt, tabName) {
+            const sections = document.getElementsByClassName("menu-section");
+            for (let s of sections) s.classList.remove("active");
+            const btns = document.getElementsByClassName("tab-btn");
+            for (let b of btns) b.classList.remove("active");
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        function updateDrink(chip, price, size) {
+            const card = chip.closest('.item-card');
+            card.querySelectorAll('.size-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            const baseName = card.dataset.baseName;
+            card.querySelector('.name-display').innerText = `${baseName} (${size})`;
+            card.querySelector('.price-display').innerText = `₹${price}`;
+        }
+
+        function addDrinkFromCard(btn) {
+            const card = btn.closest('.item-card');
+            const name = card.querySelector('.name-display').innerText;
+            const price = parseInt(card.querySelector('.price-display').innerText.replace('₹', ''));
+            addToCart(name, price);
+        }
+
+        let cart = [];
+        function addToCart(name, price) {
+            cart.push({name, price});
+            renderCart();
+            document.getElementById('cart-sidebar').classList.add('active');
+        }
+
+        function renderCart() {
+            const list = document.getElementById('cart-items');
+            const totalDisplay = document.getElementById('cart-total');
+            list.innerHTML = '';
+            let total = 0;
+            cart.forEach(item => {
+                total += item.price;
+                list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.9rem; padding:10px; background:#1a1a1a;">
+                    <span>${item.name}</span><span>₹${item.price}</span></div>`;
+            });
+            totalDisplay.innerText = `₹${total}`;
+        }
+
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('active'); }
+        function checkout() { alert("Your artisanal feast is being prepared!"); cart = []; renderCart(); toggleCart(); }
+
+        // Initialize
+        populateGrid('veg-grid', vegData, 'veg');
+        populateGrid('nonveg-grid', nonVegData, 'non-veg');
+        populateGrid('bread-grid', breadData, 'veg');
+    </script>
+</body>
+</html>
