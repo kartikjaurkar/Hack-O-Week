@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIXORA | Pixels that inspire</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,400&family=Montserrat:wght@200;300;500&display=swap" rel="stylesheet">
+   
+    <style>
+        :root {
+            --gold: #d4af37;
+            --soft-white: #fafafa;
+            --deep-onyx: #0f0f0f;
+            --glass: rgba(255, 255, 255, 0.8);
+            --transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        /* Full Page Luxury Border */
+        html {
+            border: 20px solid var(--deep-onyx);
+            min-height: 100vh;
+            box-sizing: border-box;
+            background-color: var(--soft-white);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--deep-onyx);
+            overflow-x: hidden;
+        }
+
+        /* Animated Header */
+        header {
+            padding: 100px 20px 60px;
+            text-align: center;
+        }
+
+        .brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            letter-spacing: 15px;
+            text-transform: uppercase;
+            margin: 0;
+            background: linear-gradient(to right, #000, var(--gold), #000);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 5s infinite linear;
+            background-size: 200% auto;
+        }
+
+        @keyframes shimmer { to { background-position: 200% center; } }
+
+        .tagline {
+            font-size: 0.9rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: #888;
+            margin-top: 15px;
+            font-weight: 300;
+        }
+
+        /* Sticky Glass Navigation */
+        .nav-container {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            margin-bottom: 50px;
+        }
+
+        .tab-group {
+            display: inline-flex;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            padding: 10px 40px;
+            border-radius: 50px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 25px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            color: #555;
+            transition: var(--transition);
+        }
+
+        .tab-btn.active { color: var(--gold); font-weight: 500; }
+
+        /* Professional Art Grid */
+        .gallery-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 40px;
+            padding: 0 40px 100px;
+        }
+
+        .art-card {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+            background: #eee;
+            cursor: none; /* Custom cursor feel */
+            display: none;
+            animation: reveal 1s ease-out forwards;
+        }
+
+        @keyframes reveal {
+            from { opacity: 0; clip-path: inset(100% 0 0 0); }
+            to { opacity: 1; clip-path: inset(0 0 0 0); }
+        }
+
+        .art-card.show { display: block; }
+
+        .art-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.5s scale 1.5s;
+        }
+
+        .art-card:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Overlay Info */
+        .card-overlay {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            padding: 30px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            color: white;
+            opacity: 0;
+            transition: 0.5s;
+        }
+
+        .art-card:hover .card-overlay { opacity: 1; }
+
+        /* Lightbox - Full Screen */
+        .lightbox {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--deep-onyx);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+
+        .lightbox.active { display: flex; }
+        .lightbox img { max-width: 90%; max-height: 85vh; box-shadow: 0 0 100px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
+       
+        .close-x {
+            position: absolute;
+            top: 40px; right: 40px;
+            color: var(--gold);
+            font-size: 30px;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 class="brand-name">Pixora</h1>
+        <div class="tagline">Pixels that inspire</div>
+    </header>
+
+    <div class="nav-container">
+        <div class="tab-group">
+            <button class="tab-btn active" onclick="filterGallery('all')">Collection</button>
+            <button class="tab-btn" onclick="filterGallery('fashion')">Vogue</button>
+            <button class="tab-btn" onclick="filterGallery('travel')">Escape</button>
+            <button class="tab-btn" onclick="filterGallery('food')">Taste</button>
+        </div>
+    </div>
+
+    <div class="gallery-container" id="gallery">
+        <div class="art-card show fashion"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1000&q=80"><div class="card-overlay">High Fashion • I</div></div>
+        <div class="art-card show fashion"><img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1000&q=80"><div class="card-overlay">Editorial • II</div></div>
+        <div class="art-card show fashion"><img src="https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?auto=format&fit=crop&w=1000&q=80"><div class="card-overlay">Urban Luxe • III</div></div>
+        <div class="art-card show fashion"><img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1000&q=80"><div class="card-overlay">Minimalist • IV</div></div>
+        <div class="art-card show fashion"><img src="https://images.unsplash.com/photo-1529139513055-07f9f247169b?auto=format&fit=crop&w=1000&q=80"><div class="card-overlay">Classic • V</div></div>
+
+        <div class="art-card show travel"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"><div class="card-overlay">Maldives • Azure</div></div>
+        <div class="art-card show travel"><img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1000&q=80"><div class="card-overlay">Swiss Alps • Peak</div></div>
+        <div class="art-card show travel"><img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1000&q=80"><div class="card-overlay">Santorini • White</div></div>
+        <div class="art-card show travel"><img src="https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=1000&q=80"><div class="card-overlay">Amalfi • Coast</div></div>
+        <div class="art-card show travel"><img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8df9?auto=format&fit=crop&w=1000&q=80"><div class="card-overlay">Arizona • Canyon</div></div>
+
+        <div class="art-card show food"><img src="https://images.unsplash.com/photo-1476224489176-e88e9ca4874f?auto=format&fit=crop&w=1000&q=80"><div class="card-overlay">Fine Dining • I</div></div>
+        <div class="art-card show food"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1000&q=80"><div class="card-overlay">Artisan • II</div></div>
+        <div class="art-card show food"><img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1000&q=80"><div class="card-overlay">Patisserie • III</div></div>
+        <div class="art-card show food"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1000&q=80"><div class="card-overlay">Gourmet • IV</div></div>
+        <div class="art-card show food"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1000&q=80"><div class="card-overlay">Organic • V</div></div>
+    </div>
+
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="close-x">CLOSE</span>
+        <img id="lb-img" src="">
+    </div>
+
+    <script>
+        function filterGallery(category) {
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            const cards = document.querySelectorAll('.art-card');
+            cards.forEach(card => {
+                card.style.display = 'none'; // Instant hide for re-animation
+                setTimeout(() => {
+                    if (category === 'all' || card.classList.contains(category)) {
+                        card.style.display = 'block';
+                    }
+                }, 10);
+            });
+        }
+
+        const lb = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lb-img');
+
+        document.getElementById('gallery').addEventListener('click', (e) => {
+            if(e.target.closest('.art-card')) {
+                const img = e.target.closest('.art-card').querySelector('img');
+                lbImg.src = img.src;
+                lb.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+
+        function closeLightbox() {
+            lb.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+</body>
+</html>
