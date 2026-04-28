@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Weekly Planner</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root { --ink:#1a1a1a; --paper:#f5f0e8; --cream:#ede8dc; --rust:#c0392b; --gold:#b8860b; --sage:#4a6741; --muted:#7a7265; --border:#c8c0b0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--paper); font-family: 'DM Mono', monospace; color: var(--ink); padding: 24px 16px 60px; }
+    header, .hero-illo, .add-form, .week-grid, .log-section, #perm-bar { max-width: 860px; margin: 0 auto 28px; }
+    
+    header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid var(--ink); padding-bottom: 12px; }
+    h1 { font-family: 'DM Serif Display', serif; font-size: 2.4rem; line-height: 1; }
+    
+    /* Illustration Cards */
+    .hero-illo { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+    .illo-card { flex: 1; min-width: 200px; background: var(--cream); border: 1.5px solid var(--border); border-radius: 4px; display: flex; align-items: center; gap: 14px; padding: 14px; }
+    .illo-card img { width: 54px; height: 54px; border-radius: 4px; border: 1px solid var(--border); }
+    .illo-text strong { display: block; font-family: 'DM Serif Display', serif; font-size: 0.95rem; margin-bottom: 2px; }
+    .illo-text span { font-size: 0.68rem; color: var(--muted); }
+
+    .add-form { background: var(--cream); border: 1.5px solid var(--border); padding: 18px; border-radius: 4px; }
+    .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    input, select, button { font-family: inherit; font-size: 0.82rem; padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 3px; outline: none; }
+    .btn { background: var(--ink); color: var(--paper); cursor: pointer; text-transform: uppercase; border: none; }
+    .btn:hover { background: var(--rust); }
+    
+    .week-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+    .day-col { background: var(--cream); border: 1.5px solid var(--border); border-radius: 4px; }
+    .day-col.today { border-color: var(--rust); }
+    .day-header { display: flex; justify-content: space-between; padding: 8px 12px; background: var(--ink); color: var(--paper); font-family: 'DM Serif Display', serif; }
+    .day-col.today .day-header { background: var(--rust); }
+    .task-list { list-style: none; padding: 8px 0; min-height: 48px; }
+    .task-item { display: flex; gap: 8px; padding: 7px 12px; border-bottom: 1px dashed rgba(100,90,80,0.2); }
+    .task-item.done { opacity: 0.7; text-decoration: line-through; background: #e8f0e4; }
+    .task-check { width: 14px; height: 14px; border: 1.5px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+    .done .task-check { background: var(--sage); border-color: var(--sage); color: #fff; }
+    .task-body { flex: 1; font-size: 0.79rem; }
+    .task-meta span { font-size: 0.64rem; padding: 1px 5px; border-radius: 2px; border: 1px solid var(--border); text-transform: uppercase; }
+    .btn-del { background: none; border: none; cursor: pointer; color: var(--border); }
+    .btn-del:hover { color: var(--rust); }
+    .empty-day { font-size: 0.7rem; color: var(--border); text-align: center; padding: 14px; font-style: italic; }
+    
+    #notif-banner { position: fixed; top: 18px; right: 18px; background: var(--ink); color: var(--paper); border-left: 4px solid var(--rust); padding: 13px 16px; border-radius: 4px; display: none; z-index: 999; }
+    .log-section h2 { font-family: 'DM Serif Display'; font-size: 1.3rem; border-bottom: 1px solid var(--border); margin-bottom: 14px; display: flex; justify-content: space-between;}
+    #log-list { list-style: none; max-height: 200px; overflow-y: auto; background: var(--cream); border: 1px solid var(--border); }
+    .log-item { display: flex; gap: 12px; padding: 7px 14px; font-size: 0.74rem; border-bottom: 1px dashed rgba(100,90,80,0.15); }
+    .log-ts { color: var(--muted); font-size: 0.67rem; }
+    #perm-bar { background: rgba(184,134,11,0.1); border: 1px solid var(--gold); padding: 8px 14px; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; }
+  </style>
+</head>
+<body>
+
+<div id="notif-banner"><strong style="display:block;font-size:0.7rem;opacity:0.6">⏰ Reminder</strong><span id="notif-text"></span></div>
+<header><h1>Weekly Planner</h1><span id="header-date" style="font-size:0.8rem;color:var(--muted)"></span></header>
+
+<div id="perm-bar"><span>🔔 Enable notifications for reminders</span><button class="btn" onclick="reqNotif()">Enable</button></div>
+
+<div class="hero-illo">
+  <div class="illo-card">
+    <img src="https://placehold.co/100x100/f5f0e8/c0392b?text=✓&font=Lora" alt="Tracker" />
+    <div class="illo-text"><strong>Task Tracker</strong><span>Add tasks & check them off</span></div>
+  </div>
+  <div class="illo-card">
+    <img src="https://placehold.co/100x100/f5f0e8/b8860b?text=⏰&font=Lora" alt="Reminders" />
+    <div class="illo-text"><strong>Smart Reminders</strong><span>Get notified exactly on time</span></div>
+  </div>
+  <div class="illo-card">
+    <img src="https://placehold.co/100x100/f5f0e8/4a6741?text=📝&font=Lora" alt="Activity" />
+    <div class="illo-text"><strong>Activity Log</strong><span>Every action is recorded</span></div>
+  </div>
+</div>
+
+<div class="add-form">
+  <div class="form-row">
+    <input type="text" id="t-title" placeholder="Task..." style="flex:2"/>
+    <select id="t-day" style="flex:1"><option value="">Day</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select>
+    <input type="time" id="t-time" style="flex:1"/>
+    <select id="t-tag" style="flex:1"><option value="other">Tag</option><option>Work</option><option>Personal</option><option>Health</option></select>
+    <button class="btn" onclick="addTask()">Add</button>
+  </div>
+</div>
+
+<div class="week-grid" id="week-grid"></div>
+
+<div class="log-section">
+  <h2>Activity Log <button class="btn" style="font-size:0.65rem" onclick="clearLog()">Clear</button></h2>
+  <ul id="log-list"></ul>
+</div>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const todayName = () => ['Sunday',...DAYS.slice(0,6)][new Date().getDay()];
+  
+  let [tasks, log, notifs] = ['wt_tasks', 'wt_log', 'wt_notified'].map(k => JSON.parse(localStorage.getItem(k) || '[]'));
+  let notifiedIds = new Set(notifs);
+
+  const save = () => ['wt_tasks', 'wt_log', 'wt_notified'].forEach((k, i) => localStorage.setItem(k, JSON.stringify([tasks, log, [...notifiedIds]][i])));
+  const esc = s => s.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  
+  const addLog = msg => { log = [{ ts: new Date().toLocaleTimeString(), msg }, ...log].slice(0, 100); save(); renderLog(); };
+
+  function addTask() {
+    let [title, day, time, tag] = ['t-title', 't-day', 't-time', 't-tag'].map(id => $(id).value);
+    if(!title || !day) return alert('Task and day required.');
+    tasks.push({ id: Date.now(), title, day, time, tag, done: false });
+    save(); renderWeek(); addLog(`Added "${title}" on ${day}`);
+    $('t-title').value = $('t-time').value = '';
+  }
+
+  const toggleDone = id => { let t = tasks.find(x => x.id === id); t.done = !t.done; save(); renderWeek(); addLog(`${t.done?'✓ Done':'Reopened'} "${t.title}"`); };
+  const deleteT = id => { let t = tasks.find(x => x.id === id); tasks = tasks.filter(x => x.id !== id); save(); renderWeek(); addLog(`Deleted "${t.title}"`); };
+  const clearLog = () => { if(confirm('Clear log?')) { log = []; save(); renderLog(); } };
+
+  function renderWeek() {
+    $('week-grid').innerHTML = DAYS.map(day => {
+      let dTasks = tasks.filter(t => t.day === day).sort((a,b) => (a.time||'').localeCompare(b.time||''));
+      return `<div class="day-col ${day===todayName()?'today':''}">
+        <div class="day-header"><span>${day}</span></div>
+        <ul class="task-list">
+          ${dTasks.length ? dTasks.map(t => `<li class="task-item ${t.done?'done':''}">
+            <div class="task-check" onclick="toggleDone(${t.id})">${t.done?'✓':''}</div>
+            <div class="task-body"><div>${esc(t.title)}</div><div class="task-meta">${t.time?`<span>${t.time}</span>`:''} <span>${t.tag}</span></div></div>
+            <button class="btn-del" onclick="deleteT(${t.id})">✕</button>
+          </li>`).join('') : '<li class="empty-day">Nothing scheduled</li>'}
+        </ul></div>`;
+    }).join('');
+  }
+
+  const renderLog = () => $('log-list').innerHTML = log.length ? log.map(e => `<li class="log-item"><span class="log-ts">${e.ts}</span><span>${esc(e.msg)}</span></li>`).join('') : '<li class="empty-day">No records.</li>';
+
+  const reqNotif = () => Notification.requestPermission().then(p => { if(p==='granted') $('perm-bar').style.display='none'; });
+  if(Notification.permission === 'granted') $('perm-bar').style.display='none';
+
+  function checkNotifs() {
+    let nowMin = new Date().getHours() * 60 + new Date().getMinutes();
+    tasks.filter(t => t.day === todayName() && t.time && !t.done && !notifiedIds.has(t.id)).forEach(t => {
+      let [h, m] = t.time.split(':').map(Number);
+      if(Math.abs((h*60+m) - nowMin) <= 1) {
+        $('notif-text').textContent = `${t.title} - ${t.time}`;
+        $('notif-banner').style.display = 'block';
+        setTimeout(() => $('notif-banner').style.display = 'none', 5000);
+        notifiedIds.add(t.id); save();
+        if(Notification.permission === 'granted') new Notification('Task Reminder', { body: `⏰ "${t.title}" is due!` });
+      }
+    });
+  }
+
+  $('header-date').textContent = new Date().toLocaleDateString(undefined, {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+  renderWeek(); renderLog(); setInterval(checkNotifs, 30000); checkNotifs();
+</script>
+</body>
+</html>
