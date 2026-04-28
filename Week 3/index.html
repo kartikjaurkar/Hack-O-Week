@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enthusia 2026 | IEEE Registration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ieee-blue: #00629B;
+      --accent-blue: #00b4d8;
+      --dark-navy: #1e293b;
+      --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      --card-bg: #ffffff;
+      --success: #10b981;
+      --error: #ef4444;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--dark-navy);
+      margin: 0;
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+    .form-container {
+      max-width: 750px;
+      margin: auto;
+      background: var(--card-bg);
+      padding: 50px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 20px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin: 0;
+      background: linear-gradient(to right, var(--ieee-blue), var(--accent-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -1px;
+    }
+    h3 { font-size: 1rem; color: #64748b; margin-top: 10px; font-weight: 500; }
+    section { margin-bottom: 40px; }
+    label { display: block; margin: 15px 0 5px; font-size: 0.9rem; font-weight: 600; color: #475569; }
+    input, select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      background: #f8fafc;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--ieee-blue);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(0,98,155,0.1);
+    }
+    .row { display: flex; gap: 15px; }
+    .row > div { flex: 1; }
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 15px;
+      background: var(--ieee-blue);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,98,155,0.2);
+    }
+    button:hover { background: #004a75; transform: translateY(-2px); }
+    button:active { transform: translateY(0); }
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #fff;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s ease;
+      pointer-events: none;
+      z-index: 9999;
+      max-width: 320px;
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+    #toast.success { background: var(--success); }
+    #toast.error { background: var(--error); }
+    .account-section { background: #f1f7ff; padding: 30px; border-radius: 15px; border: 1px solid #dbeafe; }
+    .account-section h2 { font-size: 1.25rem; margin-top: 0; color: var(--ieee-blue); }
+    .admin-toggle { text-align: center; margin: 30px 0 0; }
+    .admin-toggle button { width: auto; padding: 10px 24px; background: #334155; font-size: 0.85rem; margin-top: 0; }
+    #adminPanel { display: none; margin-top: 30px; background: #0f172a; border-radius: 15px; padding: 30px; color: #e2e8f0; }
+    #adminPanel h2 { color: var(--accent-blue); margin-top: 0; font-size: 1.3rem; }
+    .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+    .tab-btn { padding: 8px 20px; border-radius: 8px; border: 1px solid #334155; background: transparent; color: #94a3b8; font-size: 0.85rem; font-weight: 600; cursor: pointer; width: auto; margin-top: 0; box-shadow: none; transition: all 0.2s; }
+    .tab-btn.active, .tab-btn:hover { background: var(--ieee-blue); color: #fff; border-color: var(--ieee-blue); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    th { background: #1e293b; color: #94a3b8; text-align: left; padding: 10px 12px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    td { padding: 10px 12px; border-bottom: 1px solid #1e293b; color: #e2e8f0; }
+    tr:hover td { background: rgba(255,255,255,0.03); }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; }
+    .badge-blue { background: rgba(0,180,216,0.15); color: var(--accent-blue); }
+    .badge-green { background: rgba(16,185,129,0.15); color: #10b981; }
+    .stats-row { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
+    .stat-card { flex: 1; min-width: 120px; background: #1e293b; border-radius: 10px; padding: 15px; text-align: center; }
+    .stat-card .num { font-size: 1.8rem; font-weight: 800; color: var(--accent-blue); }
+    .stat-card .lbl { font-size: 0.75rem; color: #64748b; margin-top: 4px; }
+    .clear-btn { background: #7f1d1d; font-size: 0.8rem; padding: 8px 16px; width: auto; margin-top: 15px; box-shadow: none; }
+    .clear-btn:hover { background: #991b1b; transform: none; }
+    .no-data { text-align: center; color: #475569; padding: 30px; font-size: 0.9rem; }
+    .contact-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; background: #334155; color: #f1f5f9; padding: 30px; border-radius: 15px; margin-top: 40px; }
+    .contact-item p { margin: 5px 0; font-size: 0.85rem; }
+    .contact-item strong { color: var(--accent-blue); display: block; margin-bottom: 5px; }
+    @media (max-width: 600px) {
+      .form-container { padding: 25px; }
+      h1 { font-size: 1.8rem; }
+      .row { flex-direction: column; gap: 0; }
+      .stats-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<div class="form-container">
+  <header>
+    <h1>ENTHUSIA 2026</h1>
+    <h3>Symbiosis Institute of Technology, Nagpur<br><strong>IEEE Student Chapter</strong></h3>
+  </header>
+
+  <section>
+    <form id="registrationForm" novalidate>
+      <label for="name">Full Name</label>
+      <input type="text" id="name" placeholder="John Doe" required>
+      <div class="row">
+        <div>
+          <label for="email">Email ID</label>
+          <input type="email" id="email" placeholder="john@example.com" required>
+        </div>
+        <div>
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" pattern="[0-9]{10}" placeholder="1234567890" maxlength="10" required>
+        </div>
+      </div>
+      <label for="dept">Department</label>
+      <select id="dept" required>
+        <option value="" disabled selected>Select your department</option>
+        <option value="CSE">Computer Science & Engineering</option>
+        <option value="IT">Information Technology</option>
+        <option value="ECE">Electronics & Communication</option>
+        <option value="ME">Mechanical Engineering</option>
+      </select>
+      <label for="event">Event Selection</label>
+      <select id="event" required>
+        <option value="" disabled selected>Choose an event</option>
+        <option value="Coding Challenge">Coding Challenge</option>
+        <option value="Poster Making">Poster Making</option>
+        <option value="Tech Quiz">Tech Quiz</option>
+        <option value="Robotics">Robotics</option>
+      </select>
+      <button type="submit">Complete Registration</button>
+    </form>
+  </section>
+
+  <div class="account-section">
+    <h2>Portal Access</h2>
+    <p style="font-size:0.85rem;color:#64748b;margin-bottom:15px;">Create an account to track your event status and certificates.</p>
+    <form id="accountForm" novalidate>
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="your_username" required>
+      <div class="row">
+        <div>
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="••••••••" required>
+        </div>
+        <div>
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" placeholder="••••••••" required>
+        </div>
+      </div>
+      <button type="submit" style="background:var(--dark-navy);">Create Account</button>
+    </form>
+  </div>
+
+  <div class="admin-toggle">
+    <button onclick="toggleAdmin()">🔐 Admin Panel</button>
+  </div>
+
+  <div id="adminPanel">
+    <h2>📊 Admin Dashboard</h2>
+    <div class="stats-row" id="statsRow"></div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('regs', this)">Registrations</button>
+      <button class="tab-btn" onclick="switchTab('accounts', this)">Accounts</button>
+    </div>
+    <div id="regs" class="tab-content active">
+      <div id="regTable"></div>
+      <button class="clear-btn" onclick="clearData('registrations')">🗑 Clear Registrations</button>
+    </div>
+    <div id="accounts" class="tab-content">
+      <div id="accTable"></div>
+      <button class="clear-btn" onclick="clearData('accounts')">🗑 Clear Accounts</button>
+    </div>
+  </div>
+
+  <div class="contact-section">
+    <div class="contact-item">
+      <strong>Help Desk</strong>
+      <p>enthusia.ieee@sitnagpur.edu.in</p>
+      <p>+91 98765 43210</p>
+    </div>
+    <div class="contact-item">
+      <strong>Venue</strong>
+      <p>SIT Nagpur Campus,</p>
+      <p>Wathoda Layout, Maharashtra</p>
+    </div>
+  </div>
+</div>
+
+<!-- External JS Backend -->
+<script src="app.js"></script>
+
+</body>
+</html>
