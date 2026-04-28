@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CodeCraft Bootcamp — Web Development Program</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #FAF8F4;
+      --warm-white: #FFFFFF;
+      --ink: #1A1A2E;
+      --ink-soft: #3D3D5C;
+      --ink-muted: #7A7A9A;
+      --accent: #2563EB;
+      --accent-light: #EEF3FF;
+      --accent-warm: #F59E0B;
+      --border: #E8E4DC;
+      --shadow: 0 2px 20px rgba(26,26,46,0.07);
+      --shadow-lg: 0 8px 40px rgba(26,26,46,0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,248,244,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.35rem;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: -0.3px;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links {
+      display: flex; gap: 2rem; list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none; color: var(--ink-soft);
+      font-size: 0.9rem; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-cta {
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 8px;
+      padding: 0.55rem 1.25rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .nav-cta:hover { background: #1d4ed8; transform: translateY(-1px); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--ink); border-radius: 2px; transition: all 0.3s; }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 5rem 5% 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      max-width: 1200px; margin: 0 auto;
+      min-height: calc(100vh - 68px);
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 0.78rem; font-weight: 600;
+      padding: 0.35rem 0.9rem;
+      border-radius: 100px;
+      letter-spacing: 0.5px; text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero-badge::before { content: '●'; font-size: 0.5rem; }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.4rem, 4vw, 3.6rem);
+      line-height: 1.15;
+      letter-spacing: -1px;
+      color: var(--ink);
+      margin-bottom: 1.25rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .hero h1 em { font-style: italic; color: var(--accent); }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      font-weight: 400;
+      max-width: 480px;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+    .hero-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .btn-primary {
+      background: var(--accent); color: #fff;
+      padding: 0.85rem 2rem;
+      border-radius: 10px; border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      display: inline-block;
+      transition: all 0.2s;
+      box-shadow: 0 4px 16px rgba(37,99,235,0.3);
+    }
+    .btn-primary:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,0.35); }
+    .btn-outline {
+      background: transparent; color: var(--ink);
+      padding: 0.85rem 1.75rem;
+      border-radius: 10px; border: 1.5px solid var(--border);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem; font-weight: 500;
+      cursor: pointer; text-decoration: none;
+      display: inline-block;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+    .hero-stats {
+      display: flex; gap: 2rem; margin-top: 2.5rem; flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+    .stat {
+      min-width: 140px;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.9rem; color: var(--ink);
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.78rem; color: var(--ink-muted); margin-top: 0.2rem; font-weight: 500; }
+
+    /* Hero Visual */
+    .hero-visual {
+      display: flex; justify-content: center; align-items: center;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+    .code-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      width: 100%; max-width: 460px;
+      border: 1px solid var(--border);
+    }
+    .code-card-header {
+      background: #F4F2EE;
+      padding: 0.75rem 1.25rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #FC695A; }
+    .dot-y { background: #FDBC40; }
+    .dot-g { background: #34C749; }
+    .code-card-filename { font-size: 0.75rem; color: var(--ink-muted); margin-left: 0.5rem; font-weight: 500; }
+    .code-body { padding: 1.5rem; font-family: 'Courier New', monospace; font-size: 0.82rem; line-height: 1.8; }
+    .c-comment { color: #9CA3AF; }
+    .c-keyword { color: #2563EB; font-weight: 600; }
+    .c-string { color: #059669; }
+    .c-func { color: #7C3AED; }
+    .c-tag { color: #DC2626; }
+    .c-attr { color: #D97706; }
+
+    .curriculum-card {
+      background: var(--accent-light);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-top: 1rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .curr-icon { font-size: 1.5rem; }
+    .curr-text { font-size: 0.82rem; color: var(--accent); font-weight: 600; }
+    .curr-sub { font-size: 0.75rem; color: var(--ink-muted); font-weight: 400; }
+
+    /* ─── SECTION SHARED ─── */
+    section { padding: 5rem 5%; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block;
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      line-height: 1.2; letter-spacing: -0.5px;
+      color: var(--ink); margin-bottom: 1rem;
+    }
+    .section-desc { font-size: 1rem; color: var(--ink-soft); max-width: 520px; line-height: 1.7; }
+
+    /* ─── ABOUT STRIP ─── */
+    .about-strip {
+      background: var(--warm-white);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 3rem 5%;
+    }
+    .about-strip-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; gap: 3rem; align-items: center; flex-wrap: wrap;
+    }
+    .about-text { flex: 1; min-width: 280px; }
+    .about-text p { font-size: 0.95rem; color: var(--ink-soft); line-height: 1.8; margin-top: 0.5rem; }
+    .about-pills { flex: 1; min-width: 280px; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .pill {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.4rem 1rem;
+      font-size: 0.82rem; font-weight: 500; color: var(--ink-soft);
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+    /* ─── CURRICULUM ─── */
+    #curriculum { background: var(--cream); }
+    .curriculum-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 1.25rem;
+      margin-top: 3rem;
+    }
+    .cur-item {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .cur-item:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+    .cur-week {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .cur-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.15rem; color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .cur-topics { font-size: 0.83rem; color: var(--ink-muted); line-height: 1.7; }
+    .cur-icon { font-size: 1.6rem; margin-bottom: 0.75rem; }
+
+    /* ─── HIGHLIGHTS ─── */
+    #highlights { background: var(--warm-white); border-top: 1px solid var(--border); }
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .hl-item { }
+    .hl-icon-wrap {
+      width: 48px; height: 48px;
+      background: var(--accent-light);
+      border-radius: 12px;
+      display: grid; place-items: center;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+    .hl-title { font-weight: 600; font-size: 0.95rem; color: var(--ink); margin-bottom: 0.35rem; }
+    .hl-desc { font-size: 0.85rem; color: var(--ink-muted); line-height: 1.7; }
+
+    /* ─── TESTIMONIALS ─── */
+    #testimonials { background: var(--cream); }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .testimonial {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+    }
+    .t-stars { color: var(--accent-warm); font-size: 0.85rem; letter-spacing: 2px; margin-bottom: 1rem; }
+    .t-text { font-size: 0.9rem; color: var(--ink-soft); line-height: 1.75; font-style: italic; margin-bottom: 1.25rem; }
+    .t-author { display: flex; align-items: center; gap: 0.75rem; }
+    .t-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      display: grid; place-items: center;
+      font-weight: 700; font-size: 0.9rem; color: #fff;
+    }
+    .t-name { font-weight: 600; font-size: 0.85rem; color: var(--ink); }
+    .t-role { font-size: 0.75rem; color: var(--ink-muted); }
+
+    /* ─── PRICING ─── */
+    #pricing { background: var(--warm-white); border-top: 1px solid var(--border); }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .price-card {
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      padding: 2rem;
+      transition: all 0.2s;
+      background: var(--cream);
+      position: relative;
+    }
+    .price-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+    .price-card.featured {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .price-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--accent-warm);
+      color: #fff; font-size: 0.72rem; font-weight: 700;
+      padding: 0.3rem 1rem; border-radius: 100px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .price-plan { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; margin-bottom: 0.5rem; }
+    .price-amount {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.5rem; line-height: 1; margin-bottom: 0.25rem;
+    }
+    .price-period { font-size: 0.8rem; opacity: 0.65; margin-bottom: 1.25rem; }
+    .price-features { list-style: none; margin-bottom: 1.75rem; }
+    .price-features li {
+      font-size: 0.85rem; padding: 0.4rem 0;
+      display: flex; align-items: center; gap: 0.6rem;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .price-card.featured .price-features li { border-bottom-color: rgba(255,255,255,0.15); }
+    .check { color: #10B981; font-weight: 700; }
+    .price-card.featured .check { color: rgba(255,255,255,0.9); }
+    .price-btn {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 10px; border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem; font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .price-btn-default { background: var(--accent); color: #fff; }
+    .price-btn-default:hover { background: #1d4ed8; }
+    .price-btn-featured { background: #fff; color: var(--accent); }
+    .price-btn-featured:hover { background: #F0F4FF; }
+
+    /* ─── FAQ ─── */
+    #faq { background: var(--cream); }
+    .faq-list { max-width: 720px; margin: 3rem auto 0; }
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--warm-white);
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+    }
+    .faq-q {
+      padding: 1.1rem 1.5rem;
+      cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+      font-weight: 600; font-size: 0.92rem; color: var(--ink);
+      transition: background 0.2s;
+    }
+    .faq-q:hover { background: var(--accent-light); }
+    .faq-arrow { font-size: 1rem; transition: transform 0.3s; color: var(--accent); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+    .faq-a p { padding: 0 1.5rem 1.25rem; font-size: 0.88rem; color: var(--ink-soft); line-height: 1.75; }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+    .faq-item.open .faq-a { max-height: 200px; }
+
+    /* ─── CTA BANNER ─── */
+    .cta-banner {
+      background: var(--ink);
+      padding: 5rem 5%;
+      text-align: center;
+    }
+    .cta-banner h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      color: #fff; margin-bottom: 1rem;
+      letter-spacing: -0.5px;
+    }
+    .cta-banner p { color: rgba(255,255,255,0.65); font-size: 1rem; margin-bottom: 2rem; }
+    .cta-banner .btn-primary { font-size: 1rem; padding: 1rem 2.5rem; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--ink);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 2.5rem 5%;
+      display: flex; flex-wrap: wrap; gap: 1.5rem;
+      justify-content: space-between; align-items: center;
+    }
+    .footer-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem; color: #fff; text-decoration: none;
+    }
+    .footer-logo span { color: #60A5FA; }
+    .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .footer-links a { color: rgba(255,255,255,0.55); font-size: 0.82rem; text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: #fff; }
+    .footer-copy { color: rgba(255,255,255,0.35); font-size: 0.78rem; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; padding: 3rem 5%; }
+      .hero-visual { order: -1; }
+      .code-card { max-width: 100%; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: absolute; top: 68px; left: 0; right: 0;
+        background: var(--cream);
+        padding: 1.5rem 5%;
+        border-bottom: 1px solid var(--border);
+        gap: 1.25rem;
+        z-index: 99;
+      }
+    }
+    @media (max-width: 600px) {
+      .hero-stats { gap: 1.25rem; }
+      .about-strip-inner { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Code<span>Craft</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#curriculum">Curriculum</a></li>
+    <li><a href="#highlights">Why Us</a></li>
+    <li><a href="#testimonials">Stories</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="#pricing" class="nav-cta">Enroll Now</a>
+  <div class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="padding:0;">
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Cohort 2025 — Applications Open</div>
+      <h1>Become a <em>Full-Stack</em> Web Developer in 16 Weeks</h1>
+      <p class="hero-sub">A structured, mentor-led bootcamp that takes you from the basics to building real-world applications — with a curriculum designed for working professionals and career switchers alike.</p>
+      <div class="hero-actions">
+        <a href="#pricing" class="btn-primary">Apply for the Cohort</a>
+        <a href="#curriculum" class="btn-outline">View Curriculum →</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">2,400+</div>
+          <div class="stat-label">Graduates placed</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">16 wks</div>
+          <div class="stat-label">Program duration</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">94%</div>
+          <div class="stat-label">Hiring rate</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="code-card">
+        <div class="code-card-header">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+          <span class="code-card-filename">portfolio.jsx</span>
+        </div>
+        <div class="code-body">
+<span class="c-comment">// Week 14 — React Project</span><br>
+<span class="c-keyword">import</span> { useState } <span class="c-keyword">from</span> <span class="c-string">'react'</span>;<br><br>
+<span class="c-keyword">function</span> <span class="c-func">Portfolio</span>() {<br>
+&nbsp;&nbsp;<span class="c-keyword">const</span> [active, setActive] =<br>
+&nbsp;&nbsp;&nbsp;&nbsp;useState(<span class="c-string">'projects'</span>);<br><br>
+&nbsp;&nbsp;<span class="c-keyword">return</span> (<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-tag">&lt;main</span> <span class="c-attr">className</span>=<span class="c-string">"portfolio"</span><span class="c-tag">&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-tag">&lt;Nav</span> <span class="c-attr">active</span>={active} <span class="c-tag">/&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-tag">&lt;ProjectGrid</span> <span class="c-tag">/&gt;</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-tag">&lt;/main&gt;</span><br>
+&nbsp;&nbsp;);<br>
+}
+        </div>
+        <div style="padding: 0 1.25rem 1.25rem;">
+          <div class="curriculum-card">
+            <div class="curr-icon">🚀</div>
+            <div>
+              <div class="curr-text">Live Project Deployed</div>
+              <div class="curr-sub">React + Node.js + PostgreSQL</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT STRIP -->
+<div class="about-strip">
+  <div class="about-strip-inner">
+    <div class="about-text">
+      <div class="section-tag">About the Institute</div>
+      <p>CodeCraft Institute has been training software developers since 2016. Our industry-aligned curriculum is updated quarterly and taught by engineers with real product experience at leading tech companies.</p>
+    </div>
+    <div class="about-pills">
+      <div class="pill"><span class="pill-dot"></span> Accredited Program</div>
+      <div class="pill"><span class="pill-dot"></span> Live Mentorship</div>
+      <div class="pill"><span class="pill-dot"></span> Career Support</div>
+      <div class="pill"><span class="pill-dot"></span> Flexible Schedules</div>
+      <div class="pill"><span class="pill-dot"></span> Portfolio Projects</div>
+      <div class="pill"><span class="pill-dot"></span> Job Guarantee*</div>
+    </div>
+  </div>
+</div>
+
+<!-- CURRICULUM -->
+<section id="curriculum">
+  <div class="section-inner">
+    <div class="section-tag">What You'll Learn</div>
+    <h2 class="section-title">A curriculum built around<br>real industry needs</h2>
+    <p class="section-desc">Each phase builds on the last, moving you steadily from fundamentals to deploying production-grade applications.</p>
+    <div class="curriculum-grid">
+      <div class="cur-item">
+        <div class="cur-icon">🌐</div>
+        <div class="cur-week">Phase 1 · Weeks 1–3</div>
+        <div class="cur-title">Web Foundations</div>
+        <div class="cur-topics">HTML5 semantics, CSS layouts, Flexbox & Grid, Responsive design, Accessibility basics</div>
+      </div>
+      <div class="cur-item">
+        <div class="cur-icon">⚡</div>
+        <div class="cur-week">Phase 2 · Weeks 4–6</div>
+        <div class="cur-title">JavaScript & DOM</div>
+        <div class="cur-topics">ES6+, DOM manipulation, Events, Fetch API, Async/Await, Browser storage</div>
+      </div>
+      <div class="cur-item">
+        <div class="cur-icon">⚛️</div>
+        <div class="cur-week">Phase 3 · Weeks 7–9</div>
+        <div class="cur-title">React & State Management</div>
+        <div class="cur-topics">Components, Hooks, React Router, Context API, React Query, Testing with Vitest</div>
+      </div>
+      <div class="cur-item">
+        <div class="cur-icon">🖥️</div>
+        <div class="cur-week">Phase 4 · Weeks 10–12</div>
+        <div class="cur-title">Backend with Node.js</div>
+        <div class="cur-topics">REST APIs, Express.js, Auth & JWT, PostgreSQL, Prisma ORM, Error handling</div>
+      </div>
+      <div class="cur-item">
+        <div class="cur-icon">☁️</div>
+        <div class="cur-week">Phase 5 · Weeks 13–14</div>
+        <div class="cur-title">DevOps & Deployment</div>
+        <div class="cur-topics">Git workflows, CI/CD, Docker basics, AWS / Vercel, Environment management</div>
+      </div>
+      <div class="cur-item">
+        <div class="cur-icon">🏆</div>
+        <div class="cur-week">Phase 6 · Weeks 15–16</div>
+        <div class="cur-title">Capstone Project</div>
+        <div class="cur-topics">Full-stack app from scratch, Code reviews, Demo Day, Portfolio polish, Interview prep</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HIGHLIGHTS -->
+<section id="highlights">
+  <div class="section-inner">
+    <div class="section-tag">Program Highlights</div>
+    <h2 class="section-title">Everything you need to<br>land your first role</h2>
+    <div class="highlights-grid">
+      <div class="hl-item">
+        <div class="hl-icon-wrap">👨‍🏫</div>
+        <div class="hl-title">1:1 Mentorship</div>
+        <div class="hl-desc">Weekly one-on-one sessions with a senior developer who reviews your code and guides your learning path.</div>
+      </div>
+      <div class="hl-item">
+        <div class="hl-icon-wrap">🧩</div>
+        <div class="hl-title">Project-Based Learning</div>
+        <div class="hl-desc">Build six real-world projects — from landing pages to full-stack apps — that go straight into your portfolio.</div>
+      </div>
+      <div class="hl-item">
+        <div class="hl-icon-wrap">📋</div>
+        <div class="hl-title">Career Placement</div>
+        <div class="hl-desc">Resume reviews, mock interviews, LinkedIn optimisation, and connections to our 300+ hiring partners.</div>
+      </div>
+      <div class="hl-item">
+        <div class="hl-icon-wrap">🕓</div>
+        <div class="hl-title">Flexible Scheduling</div>
+        <div class="hl-desc">Weekday evening and weekend cohorts available so you don't have to quit your current job to study.</div>
+      </div>
+      <div class="hl-item">
+        <div class="hl-icon-wrap">♾️</div>
+        <div class="hl-title">Lifetime Community</div>
+        <div class="hl-desc">Access to the alumni network, job board, and resource library long after you graduate.</div>
+      </div>
+      <div class="hl-item">
+        <div class="hl-icon-wrap">✅</div>
+        <div class="hl-title">Job Guarantee*</div>
+        <div class="hl-desc">If you complete all coursework and don't get hired within 6 months, we refund your tuition. No catch.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-inner">
+    <div class="section-tag">Student Stories</div>
+    <h2 class="section-title">Hear from our graduates</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"I switched from accounting to frontend development after this bootcamp. The curriculum was well paced and the mentors genuinely care about your growth. Got hired at a startup within three months."</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:#2563EB;">PR</div>
+          <div>
+            <div class="t-name">Priya Rao</div>
+            <div class="t-role">Frontend Dev at Zest Tech</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"The project-based approach means you actually know how to build things, not just repeat syntax. My capstone project impressed every interviewer. Best investment I've made in my career."</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:#059669;">AK</div>
+          <div>
+            <div class="t-name">Arjun Kulkarni</div>
+            <div class="t-role">Full-Stack Dev at Infra.io</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"The flexible schedule saved me — I studied evenings while working full time. The community was incredibly supportive. Within a week of Demo Day, I had two offers."</p>
+        <div class="t-author">
+          <div class="t-avatar" style="background:#7C3AED;">SM</div>
+          <div>
+            <div class="t-name">Sneha Mehta</div>
+            <div class="t-role">Software Engineer at Finlio</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-inner">
+    <div class="section-tag">Tuition & Plans</div>
+    <h2 class="section-title">Transparent, straightforward pricing</h2>
+    <p class="section-desc">Choose a payment plan that works for you. All plans include the same full curriculum and support.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-plan">Self-Paced</div>
+        <div class="price-amount">₹49,999</div>
+        <div class="price-period">one-time payment</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span> Full 16-week curriculum</li>
+          <li><span class="check">✓</span> Community forum access</li>
+          <li><span class="check">✓</span> 6 portfolio projects</li>
+          <li><span class="check">✓</span> Career resources library</li>
+          <li style="opacity:0.4"><span>✗</span> 1:1 mentor sessions</li>
+          <li style="opacity:0.4"><span>✗</span> Job placement support</li>
+        </ul>
+        <button class="price-btn price-btn-default">Get Started</button>
+      </div>
+
+      <div class="price-card featured">
+        <div class="price-badge">Most Popular</div>
+        <div class="price-plan" style="color:rgba(255,255,255,0.7)">Full-Time Cohort</div>
+        <div class="price-amount">₹89,999</div>
+        <div class="price-period">or ₹9,999/mo for 10 months</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span> Full 16-week curriculum</li>
+          <li><span class="check">✓</span> Weekly 1:1 mentor sessions</li>
+          <li><span class="check">✓</span> 6 portfolio projects</li>
+          <li><span class="check">✓</span> Job placement support</li>
+          <li><span class="check">✓</span> Resume & interview prep</li>
+          <li><span class="check">✓</span> Job guarantee included</li>
+        </ul>
+        <button class="price-btn price-btn-featured">Apply Now</button>
+      </div>
+
+      <div class="price-card">
+        <div class="price-plan">Part-Time Evening</div>
+        <div class="price-amount">₹69,999</div>
+        <div class="price-period">or ₹7,999/mo for 9 months</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span> Full 16-week curriculum</li>
+          <li><span class="check">✓</span> Bi-weekly mentor sessions</li>
+          <li><span class="check">✓</span> 6 portfolio projects</li>
+          <li><span class="check">✓</span> Job placement support</li>
+          <li><span class="check">✓</span> Career resources library</li>
+          <li style="opacity:0.4"><span>✗</span> Job guarantee</li>
+        </ul>
+        <button class="price-btn price-btn-default">Get Started</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-inner">
+    <div class="section-tag">Frequently Asked</div>
+    <h2 class="section-title" style="text-align:center;">Questions we often get</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">Do I need prior coding experience? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a"><p>No prior experience is required. The bootcamp starts from the very basics and progressively builds your skills. We do recommend completing our free 5-hour pre-work module before the cohort begins.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How many hours per week should I commit? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a"><p>Full-time cohort students should expect 40–50 hours per week. Part-time evening students typically commit 20–25 hours. Consistent daily practice is more important than marathon sessions.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What does the job guarantee actually cover? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a"><p>If you complete all projects, attend all sessions, and don't receive a job offer within 6 months of graduation, we refund your tuition in full. Terms and conditions apply — speak to an advisor for details.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Are the classes live or recorded? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a"><p>All sessions are live and interactive, with recordings available for 90 days afterward. Live attendance is strongly encouraged as real-time Q&A is a key part of the learning experience.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">When does the next cohort start? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a"><p>The next cohort begins on 15 July 2025. Applications close on 30 June or when seats fill up — we cap cohorts at 30 students to maintain quality. Apply early to secure your spot.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+  <div class="section-inner" style="text-align:center;">
+    <h2>Ready to start your journey?</h2>
+    <p>Join over 2,400 graduates who've built their careers with CodeCraft.</p>
+    <a href="#pricing" class="btn-primary">Apply for the Next Cohort →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">Code<span>Craft</span></a>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="#curriculum">Curriculum</a>
+    <a href="#">Blog</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="footer-copy">© 2025 CodeCraft Institute. All rights reserved.</div>
+</footer>
+
+<script>
+  // Hamburger menu
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.cur-item, .hl-item, .testimonial, .price-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
