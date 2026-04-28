@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skymetrics</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F5F3EE;
+    --surface: #FFFFFF;
+    --border: rgba(0,0,0,0.08);
+    --text-primary: #1A1916;
+    --text-secondary: #6B6860;
+    --text-muted: #A8A69F;
+    --accent-sun: #D4840A;
+    --accent-cloud: #7A8FA8;
+    --accent-rain: #3A6EA8;
+    --accent-heat: #C05A1A;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 48px 24px;
+  }
+
+  header {
+    max-width: 960px;
+    margin: 0 auto 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    font-weight: 400;
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+
+  header p {
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .grid {
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .card:nth-child(2) { animation-delay: 0.08s; }
+  .card:nth-child(3) { animation-delay: 0.16s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+  }
+
+  .city-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .country {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .weather-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .temp {
+    font-family: 'DM Serif Display', serif;
+    font-size: 64px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-bottom: 6px;
+  }
+
+  .condition {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 28px;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 20px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .stat label {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .stat span {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .tag-sunny  { background: #FEF3E2; color: var(--accent-sun); }
+  .tag-cloudy { background: #EEF2F6; color: var(--accent-cloud); }
+  .tag-rainy  { background: #E8EFF7; color: var(--accent-rain); }
+
+  .feel {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 8px;
+  }
+
+  .forecast {
+    margin-top: 20px;
+  }
+
+  .forecast-title {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .forecast-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+
+  .forecast-row:last-child { border-bottom: none; }
+
+  .forecast-day { color: var(--text-secondary); width: 36px; }
+
+  .forecast-icon { font-size: 14px; }
+
+  .forecast-temp {
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .forecast-lo { color: var(--text-muted); font-size: 11px; }
+
+  .bottom-bar {
+    max-width: 960px;
+    margin: 32px auto 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4px;
+  }
+
+  .bottom-bar p {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #5AC87A;
+    display: inline-block;
+    margin-right: 6px;
+  }
+
+  @media (max-width: 700px) {
+    .grid { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Skymetrics</h1>
+  <p>Thursday, March 26, 2026 · Static data</p>
+</header>
+
+<div class="grid">
+
+  <!-- Mumbai -->
+  <div class="card">
+    <div class="card-top">
+      <div>
+        <div class="city-name">Mumbai</div>
+        <div class="country">India · MH</div>
+      </div>
+      <svg class="weather-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="11" fill="#F5A623"/>
+        <line x1="24" y1="4" x2="24" y2="9" stroke="#F5A623" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="24" y1="39" x2="24" y2="44" stroke="#F5A623" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="4" y1="24" x2="9" y2="24" stroke="#F5A623" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="39" y1="24" x2="44" y2="24" stroke="#F5A623" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="9.4" y1="9.4" x2="12.9" y2="12.9" stroke="#F5A623" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="35.1" y1="35.1" x2="38.6" y2="38.6" stroke="#F5A623" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="38.6" y1="9.4" x2="35.1" y2="12.9" stroke="#F5A623" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="12.9" y1="35.1" x2="9.4" y2="38.6" stroke="#F5A623" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <span class="tag tag-sunny">Sunny</span>
+    <div class="temp">33<span style="font-size:28px;letter-spacing:0">°C</span></div>
+    <div class="condition">Clear skies · Feels like 36°C</div>
+    <div class="divider"></div>
+    <div class="stats">
+      <div class="stat"><label>Humidity</label><span>72%</span></div>
+      <div class="stat"><label>Wind</label><span>14 km/h</span></div>
+      <div class="stat"><label>UV Index</label><span>9 · Very High</span></div>
+      <div class="stat"><label>Visibility</label><span>8 km</span></div>
+    </div>
+    <div class="forecast">
+      <div class="forecast-title">Next 4 days</div>
+      <div class="forecast-row"><span class="forecast-day">Fri</span><span class="forecast-icon">☀️</span><span class="forecast-temp">34°</span><span class="forecast-lo">27°</span></div>
+      <div class="forecast-row"><span class="forecast-day">Sat</span><span class="forecast-icon">🌤</span><span class="forecast-temp">32°</span><span class="forecast-lo">26°</span></div>
+      <div class="forecast-row"><span class="forecast-day">Sun</span><span class="forecast-icon">⛅</span><span class="forecast-temp">31°</span><span class="forecast-lo">25°</span></div>
+      <div class="forecast-row"><span class="forecast-day">Mon</span><span class="forecast-icon">☀️</span><span class="forecast-temp">33°</span><span class="forecast-lo">26°</span></div>
+    </div>
+  </div>
+
+  <!-- London -->
+  <div class="card">
+    <div class="card-top">
+      <div>
+        <div class="city-name">London</div>
+        <div class="country">United Kingdom · ENG</div>
+      </div>
+      <svg class="weather-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="24" cy="26" rx="14" ry="9" fill="#C8D4DF"/>
+        <ellipse cx="19" cy="22" rx="9" ry="8" fill="#DBE5ED"/>
+        <ellipse cx="30" cy="21" rx="10" ry="8" fill="#DBE5ED"/>
+        <line x1="18" y1="36" x2="16" y2="43" stroke="#7AAFDA" stroke-width="2" stroke-linecap="round"/>
+        <line x1="24" y1="36" x2="22" y2="43" stroke="#7AAFDA" stroke-width="2" stroke-linecap="round"/>
+        <line x1="30" y1="36" x2="28" y2="43" stroke="#7AAFDA" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <span class="tag tag-rainy">Rainy</span>
+    <div class="temp">11<span style="font-size:28px;letter-spacing:0">°C</span></div>
+    <div class="condition">Light rain showers · Feels like 8°C</div>
+    <div class="divider"></div>
+    <div class="stats">
+      <div class="stat"><label>Humidity</label><span>84%</span></div>
+      <div class="stat"><label>Wind</label><span>22 km/h</span></div>
+      <div class="stat"><label>UV Index</label><span>2 · Low</span></div>
+      <div class="stat"><label>Visibility</label><span>5 km</span></div>
+    </div>
+    <div class="forecast">
+      <div class="forecast-title">Next 4 days</div>
+      <div class="forecast-row"><span class="forecast-day">Fri</span><span class="forecast-icon">🌧</span><span class="forecast-temp">10°</span><span class="forecast-lo">6°</span></div>
+      <div class="forecast-row"><span class="forecast-day">Sat</span><span class="forecast-icon">⛅</span><span class="forecast-temp">13°</span><span class="forecast-lo">7°</span></div>
+      <div class="forecast-row"><span class="forecast-day">Sun</span><span class="forecast-icon">🌤</span><span class="forecast-temp">14°</span><span class="forecast-lo">8°</span></div>
+      <div class="forecast-row"><span class="forecast-day">Mon</span><span class="forecast-icon">🌦</span><span class="forecast-temp">12°</span><span class="forecast-lo">7°</span></div>
+    </div>
+  </div>
+
+  <!-- New York -->
+  <div class="card">
+    <div class="card-top">
+      <div>
+        <div class="city-name">New York</div>
+        <div class="country">United States · NY</div>
+      </div>
+      <svg class="weather-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="9" fill="#F5C842" opacity="0.9"/>
+        <ellipse cx="28" cy="28" rx="12" ry="8" fill="#C8D4DF"/>
+        <ellipse cx="23" cy="24" rx="8" ry="7" fill="#DBE5ED"/>
+        <ellipse cx="33" cy="23" rx="9" ry="7" fill="#DBE5ED"/>
+      </svg>
+    </div>
+    <span class="tag tag-cloudy">Partly Cloudy</span>
+    <div class="temp">17<span style="font-size:28px;letter-spacing:0">°C</span></div>
+    <div class="condition">Mostly cloudy · Feels like 15°C</div>
+    <div class="divider"></div>
+    <div class="stats">
+      <div class="stat"><label>Humidity</label><span>61%</span></div>
+      <div class="stat"><label>Wind</label><span>19 km/h</span></div>
+      <div class="stat"><label>UV Index</label><span>4 · Moderate</span></div>
+      <div class="stat"><label>Visibility</label><span>12 km</span></div>
+    </div>
+    <div class="forecast">
+      <div class="forecast-title">Next 4 days</div>
+      <div class="forecast-row"><span class="forecast-day">Fri</span><span class="forecast-icon">⛅</span><span class="forecast-temp">18°</span><span class="forecast-lo">11°</span></div>
+      <div class="forecast-row"><span class="forecast-day">Sat</span><span class="forecast-icon">☀️</span><span class="forecast-temp">21°</span><span class="forecast-lo">13°</span></div>
+      <div class="forecast-row"><span class="forecast-day">Sun</span><span class="forecast-icon">☀️</span><span class="forecast-temp">22°</span><span class="forecast-lo">14°</span></div>
+      <div class="forecast-row"><span class="forecast-day">Mon</span><span class="forecast-icon">🌦</span><span class="forecast-temp">16°</span><span class="forecast-lo">10°</span></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="bottom-bar">
+  <p><span class="dot"></span>All data is static — for display purposes only</p>
+  <p>Last updated: Thu 26 Mar, 09:00 AM</p>
+</div>
+
+</body>
+</html>
