@@ -1,0 +1,179 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kartik Jaurkar - Professional Resume</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #10b981; /* Changed color to Green for a different feel */
+      --dark-text: #1e293b;
+      --light-text: #64748b;
+      --bg-color: #f1f5f9;
+      --sidebar-bg: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--dark-text);
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+
+    .resume-container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      display: flex;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 35%;
+      background-color: #f8fafc;
+      padding: 40px 30px;
+      border-right: 1px solid #e2e8f0;
+    }
+
+    .profile-img {
+      width: 120px;
+      height: 120px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3rem;
+      font-weight: 700;
+    }
+
+    .main-content {
+      width: 65%;
+      padding: 40px 40px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+      color: var(--dark-text);
+    }
+
+    .subtitle {
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-bottom: 25px;
+      font-size: 1.1rem;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      color: var(--dark-text);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 5px;
+    }
+
+    h2 i { margin-right: 10px; color: var(--primary-color); }
+    .section { margin-bottom: 30px; }
+    .info-item { margin-bottom: 15px; font-size: 0.9rem; }
+    .info-item strong { display: block; color: var(--dark-text); }
+    .info-item span { color: var(--light-text); }
+    ul { list-style: none; }
+    ul li { margin-bottom: 8px; position: relative; padding-left: 20px; color: var(--light-text); }
+    ul li::before { content: "•"; color: var(--primary-color); font-weight: bold; position: absolute; left: 0; }
+    .skill-tag { display: inline-block; background: #ecfdf5; color: var(--primary-color); padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; margin: 0 5px 8px 0; font-weight: 500; }
+
+    @media (max-width: 768px) {
+      .resume-container { flex-direction: column; }
+      .sidebar, .main-content { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="resume-container">
+    <div class="sidebar">
+      <div class="profile-img">KJ</div>
+      
+      <div class="section">
+        <h2><i class="fas fa-user"></i> Contact</h2>
+        <div class="info-item">
+          <strong>Email</strong>
+          <span>kartik.jaurkar.batch2025@sitnagpur.edu.in</span>
+        </div>
+        <div class="info-item">
+          <strong>Location</strong>
+          <span>Nagpur, Maharashtra</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2><i class="fas fa-code"></i> Skills</h2>
+        <div class="skills-container">
+          <span class="skill-tag">C++</span>
+          <span class="skill-tag">App Development</span>
+          <span class="skill-tag">Team Leadership</span>
+          <span class="skill-tag">Problem Solving</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2><i class="fas fa-heart"></i> Interests</h2>
+        <ul>
+          <li>Robotics</li>
+          <li>Machine Learning</li>
+          <li>Photography</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <header>
+        <h1>Kartik Jaurkar</h1>
+        <p class="subtitle">B.Tech Student | Computer Science & Engineering</p>
+      </header>
+
+      <div class="section">
+        <h2><i class="fas fa-bullseye"></i> Objective</h2>
+        <p style="color: var(--light-text);">
+          To apply technical skills and creativity to solve real-world problems while pursuing a degree in Computer Science, aiming to excel in modern development environments.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2><i class="fas fa-graduation-cap"></i> Education</h2>
+        <div style="margin-bottom: 10px;">
+          <strong style="color: var(--dark-text);">Bachelor of Technology in CSE</strong><br>
+          <span style="color: var(--primary-color); font-weight: 500;">Symbiosis Institute of Technology, Nagpur</span><br>
+          <span style="color: var(--light-text); font-size: 0.9rem;">2025 — 2029</span>
+          <p style="font-size: 0.9rem; margin-top: 5px;">Current Status: 1st Year, 2nd Semester</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2><i class="fas fa-trophy"></i> Highlights</h2>
+        <ul>
+          <li>Experience in leading student project groups.</li>
+          <li>Keen interest in AI-driven mobile applications.</li>
+          <li>Regular participant in regional technical workshops.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
