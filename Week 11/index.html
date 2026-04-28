@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Book Catalogue</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Library Book Catalogue</h1>
+            <p>Manage your book collection with elegance</p>
+        </header>
+        
+        <section class="add-book">
+            <h2>Add a Book</h2>
+            <input type="text" id="book-title" placeholder="Book Title" required>
+            <input type="text" id="book-author" placeholder="Author" required>
+            <button id="add-btn">Add Book</button>
+            <p id="add-message"></p>
+        </section>
+        
+        <section class="search-book">
+            <h2>Search by Title</h2>
+            <input type="text" id="search-title" placeholder="Enter title to search">
+            <button id="search-btn">Search</button>
+            <div id="search-results"></div>
+        </section>
+        
+        <section class="book-list">
+            <h2>Book Collection</h2>
+            <ul id="book-ul"></ul>
+        </section>
+        
+        <section class="remove-book">
+            <h2>Remove a Book</h2>
+            <select id="remove-select">
+                <option value="">Select a book to remove</option>
+            </select>
+            <button id="remove-btn">Remove Book</button>
+            <p id="remove-message"></p>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
